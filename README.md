@@ -18,4 +18,4 @@ dotnet restore
 ## Run:
 dotnet run "c:\media\myshowtotrim" 10 78  
 
-The above command will create a batch file "trim.bat" that when run created an "ok\" folder inside the target folder and trims 10 sec from the start and 78 sec from the end of every .mp4 or .avi file in the folder.
+The above command will create a batch file "trim.bat" that when run creates an "ok\" folder inside the target folder and trims 10 sec from the start and 78 sec from the end of every .mp4 or .avi file in the folder.
