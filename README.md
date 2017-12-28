@@ -10,7 +10,7 @@ Download ffmpeg:
 https://www.ffmpeg.org/download.html
 
 Change the code:  
-`public static string ffmpegLocation = @"C:\dev\ffmpeg\bin\ffmpeg.exe";`  to
+`public static string ffmpegLocation = @"C:\dev\ffmpeg\bin\ffmpeg.exe";`  to  
 `public static string ffmpegLocation = [wherevery you installed the ffmpeg.exe];`
 
 ## First:
