@@ -9,7 +9,7 @@ https://www.microsoft.com/net/learn/get-started/windows
 Download ffmpeg:  
 https://www.ffmpeg.org/download.html
 
-Change the code:  
+Change the code in `Program.cs`:  
 `public static string ffmpegLocation = @"C:\dev\ffmpeg\bin\ffmpeg.exe";`  to  
 `public static string ffmpegLocation = [wherevery you installed the ffmpeg.exe];`
 
