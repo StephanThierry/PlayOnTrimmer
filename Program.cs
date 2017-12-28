@@ -10,6 +10,9 @@ namespace PlayOnTrimmer
 {
     class Program
     {
+
+        public static string ffmpegLocation = @"C:\dev\ffmpeg\bin\ffmpeg.exe";
+
         private static string[] getVideoFiles(string folder)
         {
             List<string> VideoExt = new List<string> { ".mp4", ".avi" };
@@ -22,7 +25,9 @@ namespace PlayOnTrimmer
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if (args.Length<3) {
-                Console.WriteLine("Usage: targetPath SecAtStart SecAtEnd" + Environment.NewLine + "Example: dotnet run \"c:\\media\\shows\" 11 23" + Environment.NewLine + "That will create a trim.bat file in the \"c:\\media\\shows\" folder that cuts 11 sec from the start and 23 sec from the end of all .mp4 and .avi files in the folder.");
+                Console.WriteLine("Usage: targetPath SecAtStart SecAtEnd");
+                Console.WriteLine("Example: dotnet run \"c:\\media\\shows\" 11 23");
+                Console.WriteLine("That will create a trim.bat file in the \"c:\\media\\shows\" folder that cuts 11 sec from the start and 23 sec from the end of all .mp4 and .avi files in the folder.");
                 return;
             }
             string targetPath = Path.GetFullPath(args[0]);
@@ -54,7 +59,7 @@ namespace PlayOnTrimmer
 
                     if (startCut.Length==1) startCut = "0" + startCut;
                     string batchCommand = @" -i """ + targetPath + Path.GetFileName(fileName) + @""" -vcodec copy -acodec copy -ss 00:00:" + startCut + @".000 -t " + EndDuration + @".000 """+targetPath+@"ok\" + Path.GetFileName(fileName) + @"""" + Environment.NewLine;
-                    file.WriteLine(@"C:\dev\ffmpeg\bin\ffmpeg" + batchCommand);
+                    file.WriteLine(ffmpegLocation + batchCommand);
                 }
                 file.Dispose();
                 Console.WriteLine("trim.bat created");
@@ -72,7 +77,7 @@ namespace PlayOnTrimmer
                 StartInfo = new ProcessStartInfo
                 {
                     
-                    FileName = @"C:\dev\ffmpeg\bin\ffmpeg", 
+                    FileName = Program.ffmpegLocation, 
                     Arguments = cmd, 
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
