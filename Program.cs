@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace runffmpeg
+namespace PlayOnTrimmer
 {
     class Program
     {
