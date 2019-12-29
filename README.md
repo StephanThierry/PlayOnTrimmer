@@ -1,5 +1,5 @@
 # PlayOnTrimmer
-DotNet Core Console. Trim start and end of mp4 files using ffmeg 
+DotNet Core Console. Trim start and end of mp4 files using ffmpeg 
 
 ## Prereq:  
 
