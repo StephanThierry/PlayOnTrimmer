@@ -42,28 +42,27 @@ namespace PlayOnTrimmer
 
             
             // IBM00858 encoding is required for Danish letters to work inside batch file
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(System.IO.File.Create(targetPath + "trim.bat"), Encoding.GetEncoding("IBM00858")))
+            string[] fileEntries = getVideoFiles(targetPath);
+            String filetext = "";
+            filetext += "chcp 65001" + Environment.NewLine; //Ensure the batch is run using UTF-8 encoding
+            filetext += "md ok" + Environment.NewLine;
+
+            foreach (string fileName in fileEntries)
             {
-                string[] fileEntries = getVideoFiles(targetPath);
-                file.WriteLine("md ok");
+                string fileInfo = ffmpegHelper.command(@" -i """ + targetPath + Path.GetFileName(fileName) + "\"");
+                int DurationPos = fileInfo.IndexOf("Duration");
+                string DurationString = fileInfo.Substring(DurationPos+10, 11);
+                TimeSpan Duration;
+                TimeSpan.TryParseExact(DurationString, @"hh\:mm\:ss\.ff", null, out Duration);
+                Duration = Duration.Subtract(TimeSpan.FromSeconds(endCutInt+startCutInt) );
+                String EndDuration = Duration.ToString(@"hh\:mm\:ss");
 
-                foreach (string fileName in fileEntries)
-                {
-                    string fileInfo = ffmpegHelper.command(@" -i """ + targetPath + Path.GetFileName(fileName) + "\"");
-                    int DurationPos = fileInfo.IndexOf("Duration");
-                    string DurationString = fileInfo.Substring(DurationPos+10, 11);
-                    TimeSpan Duration;
-                    TimeSpan.TryParseExact(DurationString, @"hh\:mm\:ss\.ff", null, out Duration);
-                    Duration = Duration.Subtract(TimeSpan.FromSeconds(endCutInt+startCutInt) );
-                    String EndDuration = Duration.ToString(@"hh\:mm\:ss");
-
-                    if (startCut.Length==1) startCut = "0" + startCut;
-                    string batchCommand = @" -i """ + targetPath + Path.GetFileName(fileName) + @""" -vcodec copy -acodec copy -ss 00:00:" + startCut + @".000 -t " + EndDuration + @".000 """+targetPath+@"ok\" + Path.GetFileName(fileName) + @"""" + Environment.NewLine;
-                    file.WriteLine(ffmpegLocation + batchCommand);
-                }
-                file.Dispose();
-                Console.WriteLine("trim.bat created");
+                if (startCut.Length==1) startCut = "0" + startCut;
+                string batchCommand = @" -i """ + targetPath + Path.GetFileName(fileName) + @""" -vcodec copy -acodec copy -ss 00:00:" + startCut + @".000 -t " + EndDuration + @".000 """+targetPath+@"ok\" + Path.GetFileName(fileName) + @"""" + Environment.NewLine;
+                filetext += ffmpegLocation + batchCommand + Environment.NewLine;
             }
+            File.WriteAllText(targetPath + "trim.bat", filetext);
+            Console.WriteLine("trim.bat created");
 
         }
     }
